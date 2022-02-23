@@ -2,11 +2,22 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="css/style.css">
 <title>表記揺れ</title>
 </head>
 <body>
-	<h2>表記揺れ</h2>
-	<div id="linkList"></div>
+	<noscript class="error-message">このサービスをご利用いただくには、JavaScriptを有効にする必要があります。</noscript>
+	<div id="container">
+		<h2>表記揺れ</h2>
+		<div id="line"></div>
+		<div id="linkList"></div>
+		<div id="upload"><input id="uploadFile" type="file" name="file"/></div>
+		<div id="wordList"></div>
+		<button id="check" class="btn check">CHECK</button>
+		<button id="clear" class="btn clear">CLEAR</button>
+		<p><textarea id="text"></textarea></p>
+		<div id="result"></div>
+	</div>
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/test.js"></script>
 </body>

@@ -1,0 +1,115 @@
+/* 共通部分 */
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+#container{
+	width: 80%;
+	min-height: 100vh;
+	height: auto;
+	background-color: white;
+	margin:0 auto;
+	padding: 20px 20px 0 20px;
+}
+ul {
+	list-style-type: none;
+	counter-reset: item;
+	
+}
+/* ヘッダー */
+#line{
+	height: 60px;
+	width:100%;
+/* 	border-bottom: 1px solid gray; */
+	box-shadow: 0 0,
+				0 0,
+				0px -1px 5px 1px #999,
+				0 0;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+.error-message {
+	margin-bottom: 20px;
+}
+
+/* リンク */
+ul.linkList {
+	width: 100%;
+	display: flex;
+}
+ul.linkList:first-child {
+	margin-top: 20px;
+}
+li.linkWrap {
+	margin: .5em;
+	width: 25%;
+}
+.linkNm {
+	color: white;
+	background-color: skyblue;
+	padding: 2px 0 2px 5px;
+}
+
+
+/* 表記揺れ対象文字 */
+input#uploadFile {
+	margin-top: 20px;
+}
+ul.checkWords {
+	display: flex;
+}
+ul.checkWords:first-child {
+	margin-top: 20px;
+}
+ul.checkWords li {
+	margin: 2px;
+}
+input
+
+/* 対象テキスト */
+textarea {
+	border-color: #c0c0c0;
+	width: 336px
+}
+.highlight {
+	background-color: yellow;
+}
+#disp {
+	border: 1px solid gray;
+}
+.inner:last-child {
+	margin-bottom: 0;
+	padding-bottom: 30px;
+}
+/* ボタン */
+input[type="button"] {
+	margin: 10px 0 10px 10px;
+	padding: 2px 8px;
+}
+#check, #register {
+	background-color: skyblue;
+	color: white;
+	border: 2px solid skyblue;
+}
+#check:hover, #register:hover {
+	background-color: blue;
+	border: 2px solid blue;
+	cursor: pointer;
+}
+
+@media screen and (max-width: 480px) {
+	/* スマホ用 */
+	#container{
+		width: 100%;
+		padding: 20px 10px;
+	}
+	#title {
+	    width: 100%;
+	}
+	.inner {
+		margin-right: auto;
+		margin-left: auto;
+	}
+}

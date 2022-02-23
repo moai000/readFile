@@ -1,4 +1,6 @@
 
+let checkWords;
+
 $(document).ready(function(){
 
  /**
@@ -10,15 +12,18 @@ $(document).ready(function(){
  		if (xmlhttp.status == 200) { 
  			var elem = document.getElementById("linkList");
  			
- 			var textContent = xmlhttp.responseText.split('\n');
+ 			var textContent = xmlhttp.responseText.split('\r\n');
  			for (let i=0; textContent.length>i; i++){
- 				textContent[i] = textContent[i].replace('\r','').split(',');
+ 				textContent[i] = textContent[i].split(',');
  			}
  			
- 			var linkList = document.createElement("ul");
- 			linkList.classList.add("linkList");
- 			
+// 			var linkList = document.createElement("ul");
+// 			linkList.classList.add("linkList"); 			 			
  			for (let i=0; textContent.length>i; i++){
+				if ( i%3==0 ){
+					var linkList = document.createElement("ul");
+ 					linkList.classList.add("linkList");
+				}
 				var li = document.createElement("li");
 				li.classList.add("linkWrap");
 				var linkNmDiv = document.createElement("div");
@@ -35,10 +40,12 @@ $(document).ready(function(){
 				li.appendChild(linkNmDiv);
 				li.appendChild(link);
 				linkList.appendChild(li);
- 			}
- 			
-    		elem.appendChild(linkList);
-    		
+				
+				if ( (i-1)%3==0 || i-1==textContent.length){
+					elem.appendChild(linkList);
+				}
+			}
+ 			    		
     	} else {
     		alert("status = " + xmlhttp.status);
     	}
@@ -48,4 +55,98 @@ $(document).ready(function(){
  xmlhttp.send();
  
  
+});
+
+
+/**
+* CSVから設定値の取得
+*/
+//$("#uplodFile").change(function(evt){
+var upload = document.getElementById("uploadFile")
+upload.addEventListener("change",function(evt){
+  var file = evt.target.files;
+
+  //FileReaderの作成
+  var reader = new FileReader();
+  //テキスト形式で読み込む
+  reader.readAsText(file[0]);
+  
+  //読込終了後の処理
+  reader.onload = function(ev){
+  	checkWords = reader.result;
+  	checkWords = checkWords.split('\r\n');
+  	for (let i=0; checkWords.length>i; i++) {
+		checkWords[i] = checkWords[i].split(',');
+	}
+	let checkWordsArray = getCheckWords();
+	
+	let ul = document.createElement("ul");
+	ul.classList.add("checkWords");
+	//表記揺れ対象文字表示
+	for (let i=0; checkWordsArray.length>i; i++) {
+		if (i%6==0){
+//			while (ul.firstChild){
+//				ul.removeChild(ul.firstChild);
+//			}
+			let ul = document.createElement("ul");
+			ul.classList.add("checkWords");
+		}
+		let li = document.createElement("li");
+		
+		//対象文字入力用input作成
+		let input = document.createElement("input");
+		input.type = "text";
+		input.setAttribute("name","chkwd");
+		input.value = checkWordsArray[i];
+		
+		li.appendChild(input);
+		ul.appendChild(li);
+		
+		if ((i-1)%6==0 || i+1==checkWordsArray.length){
+			$("#wordList").append(ul);
+		}
+		
+	}
+  }
+});
+
+/**
+ * 表記揺れ対象文字列の取得
+ */
+function getCheckWords(){
+	let checkWordsArray = [];
+	
+	for (const array of checkWords){
+		if(array[0]!==""){
+			checkWordsArray.push(array[0])
+		}
+		//console.log(array[0])
+	}
+	return checkWordsArray
+}
+
+/**
+ * 検索結果で該当箇所を黄色でハイライトする.
+ */
+let check = document.getElementById("check")
+check.addEventListener("click",function(){
+	let text = document.getElementById("text").value;
+	let checkWordsArray = getCheckWords();
+	for( let word of checkWordsArray ){
+		let regexp = new RegExp(`(${word})`, 'gi')
+		text = text.replace(regexp, '<span class="highlight">$1</span>')
+	}
+	let result = document.getElementById("result")
+	result.innerHTML = text
+	result.style.display = "block"
+});
+
+/**
+ *  対象テキスト削除
+ */
+let clear = document.getElementById("clear")
+clear.addEventListener("click",function(){
+	document.getElementById("text").value = ""
+	document.getElementById("disp").textContent	 = ""
+	document.getElementById("disp").style.display = "none"
 });
