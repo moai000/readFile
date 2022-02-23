@@ -56,7 +56,17 @@ $(document).ready(function(){
  xmlhttp.open("GET", "./text/fileList.txt");
  xmlhttp.send();
  
- 
+ /**
+ * localStorageの取得
+ */
+ function getLocalStorage(){
+ 	let checkWords = localStorage.getItem("checkWords");
+ 	if (checkWords){
+ 		setCheckWords(checkWords.split(","));
+ 	}	
+ }
+ getLocalStorage()
+
 });
 
 
@@ -81,14 +91,23 @@ upload.addEventListener("change",function(evt){
 		checkWords[i] = checkWords[i].split(',');
 	}
 	let checkWordsArray = getCheckWords();
-	
+	setCheckWords(checkWordsArray);
+  }
+});
+
+/**
+ * 表記揺れ対象文字列のhtml作成
+ */
+function setCheckWords(checkWordsArray){
+
 	let wordList = document.getElementById("wordList");
 	while (wordList.firstChild){
 		wordList.removeChild(wordList.firstChild);
 	}
-	
+
 	let ul = document.createElement("ul");
 	ul.classList.add("checkWords");
+
 	//表記揺れ対象文字表示
 	for (let i=0; checkWordsArray.length>i; i++) {
 		if (i%6==0){
@@ -96,23 +115,21 @@ upload.addEventListener("change",function(evt){
 			ul.classList.add("checkWords");
 		}
 		let li = document.createElement("li");
-		
+
 		//対象文字入力用input作成
 		let input = document.createElement("input");
 		input.type = "text";
 		input.setAttribute("name","chkwd");
 		input.value = checkWordsArray[i];
-		
+
 		li.appendChild(input);
 		ul.appendChild(li);
-		
+
 		if ((i+1)%6==0 || i+1==checkWordsArray.length){
 			wordList.append(ul);
 		}
-		
 	}
-  }
-});
+}
 
 /**
  * 表記揺れ対象文字列の取得
@@ -144,7 +161,7 @@ function getInputCheckWords(){
 }
 
 /**
- * 検索結果で該当箇所を黄色でハイライトする.
+ * 該当箇所のハイライト
  */
 let check = document.getElementById("check")
 check.addEventListener("click",function(){
@@ -161,6 +178,8 @@ check.addEventListener("click",function(){
 		result.innerHTML = text
 		result.style.display = "block"
 	}
+
+	localStorage.setItem("checkWords", checkWordsArray);
 });
 
 /**

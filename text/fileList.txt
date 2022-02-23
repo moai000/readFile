@@ -1,4 +1,4 @@
-サンプル1,sample1.csv
+表記チェックツール,表記揺れチェックツール.csv
 サンプル2,sample2.csv
 サンプル3,sample3.csv
 サンプル4,sample4.csv

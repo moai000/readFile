@@ -31,7 +31,17 @@ ul {
 	top: 0;
 }
 .error-message {
-	margin-bottom: 20px;
+	width: 100%;
+	min-height: 50px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	padding: 5px 10px;
+	text-align: center;
+	line-height: 50px;
+	color: white;
+	background: linear-gradient(#ff4500,#ff0000);
+	border-radius: 5px;
 }
 
 /* リンク */
@@ -89,12 +99,12 @@ textarea {
 	box-sizing: border-box;
 	border-radius: 5px;
 	border: 1px solid #e5e5e5;
-	font-size: 12px;
+	font-size: 14px;
 	outline: none;
 	display: none;
 }
 .textArea{
-	margin-top: 10px;
+	margin-top: 30px;
 }
 
 /* ボタン */
@@ -118,13 +128,11 @@ button {
 	/* スマホ用 */
 	#container{
 		width: 100%;
-		padding: 20px 10px;
 	}
-	#title {
-	    width: 100%;
+	ul.checkWords {
+		display: block;
 	}
-	.inner {
-		margin-right: auto;
-		margin-left: auto;
+	ul.linkList {
+		display: block;
 	}
 }
