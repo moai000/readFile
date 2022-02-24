@@ -75,6 +75,9 @@ ul.checkWords:first-child {
 ul.checkWords li {
 	margin: 2px;
 }
+li.changedWord {
+	min-width: 150px;
+}
 
 /* テキスト表示 */
 textarea {
@@ -95,6 +98,7 @@ textarea {
 }
 #result {
 	margin-top: 10px;
+	margin-bottom: 100px;
 	padding: 8px;
 	box-sizing: border-box;
 	border-radius: 5px;

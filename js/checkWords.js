@@ -60,9 +60,24 @@ $(document).ready(function(){
  * localStorageの取得
  */
  function getLocalStorage(){
- 	let checkWords = localStorage.getItem("checkWords");
- 	if (checkWords){
- 		setCheckWords(checkWords.split(","));
+ 	let words = localStorage.getItem("words");
+	let wordsArr = [];
+	let tmpArr = [];
+ 	if (words){
+ 		words = words.split(",");
+		for (let i=0; words.length>i; i++){
+			if (tmpArr.length<2){
+				tmpArr.push(words[i]); 
+			}else {
+				wordsArr.push(tmpArr);
+				tmpArr = [];
+				tmpArr.push(words[i]); 
+			}
+			if (i+1==words.length){
+				wordsArr.push(tmpArr);
+			}
+		}
+		setCheckWords(wordsArr);
  	}	
  }
  getLocalStorage()
@@ -73,7 +88,6 @@ $(document).ready(function(){
 /**
 * CSVから設定値の取得
 */
-//$("#uplodFile").change(function(evt){
 var upload = document.getElementById("uploadFile")
 upload.addEventListener("change",function(evt){
   var file = evt.target.files;
@@ -90,15 +104,15 @@ upload.addEventListener("change",function(evt){
   	for (let i=0; checkWords.length>i; i++) {
 		checkWords[i] = checkWords[i].split(',');
 	}
-	let checkWordsArray = getCheckWords();
-	setCheckWords(checkWordsArray);
+	let wordsArray = getWordsFromCsv();
+	setCheckWords(wordsArray);
   }
 });
 
 /**
  * 表記揺れ対象文字列のhtml作成
  */
-function setCheckWords(checkWordsArray){
+function setCheckWords(array){
 
 	let wordList = document.getElementById("wordList");
 	while (wordList.firstChild){
@@ -109,26 +123,57 @@ function setCheckWords(checkWordsArray){
 	ul.classList.add("checkWords");
 
 	//表記揺れ対象文字表示
-	for (let i=0; checkWordsArray.length>i; i++) {
-		if (i%6==0){
-			ul = document.createElement("ul");
-			ul.classList.add("checkWords");
-		}
-		let li = document.createElement("li");
+	for (let i=0; array.length>i; i++) {
 
-		//対象文字入力用input作成
-		let input = document.createElement("input");
-		input.type = "text";
-		input.setAttribute("name","chkwd");
-		input.value = checkWordsArray[i];
+		ul = document.createElement("ul");
+		ul.classList.add("checkWords");
+		let arrow = document.createElement("li");
+		arrow.innerText = "←";
+		arrow.classList.add("arrow");
 
-		li.appendChild(input);
-		ul.appendChild(li);
+		for (let m=0; array[i].length>m; m++){
+			let li = document.createElement("li");
+			
+			//対象文字入力用input作成
+			let input = document.createElement("input");
+			input.type = "text";
+			input.setAttribute("name","chkwd");
 
-		if ((i+1)%6==0 || i+1==checkWordsArray.length){
+			if (m==0){
+				li.classList.add("changedWord");
+				input.value = array[i][m];
+				input.readOnly = true;
+				input.setAttribute("name","chgwd");
+			}else {
+				li.classList.add("checkWord");
+				input.value = array[i][m];
+				ul.appendChild(arrow);
+			}
+			li.appendChild(input);
+			ul.appendChild(li);
 			wordList.append(ul);
 		}
 	}
+}
+
+/**
+ * CSVの値を配列化
+ */
+function getWordsFromCsv(){
+	let tmpArr = [];
+	let checkWordsArray = [];
+	
+	for (const array of checkWords){
+		for (let i=0; array.length>i; i++){
+			if (i>0 && array[i]!==""){
+				tmpArr.push(array[0]);
+				tmpArr.push(array[i]);
+				checkWordsArray.push(tmpArr);
+			}
+			tmpArr = [];
+		}
+	}
+	return checkWordsArray
 }
 
 /**
@@ -138,10 +183,12 @@ function getCheckWords(){
 	let checkWordsArray = [];
 	
 	for (const array of checkWords){
-		if(array[0]!==""){
-			checkWordsArray.push(array[0])
+		for (let i=0; array[i].length>i; i++){
+			if (i!==0 && array[i]!==""){
+				checkWordsArray.push(array[i]);
+			}
 		}
-		//console.log(array[0])
+		
 	}
 	return checkWordsArray
 }
@@ -168,7 +215,7 @@ check.addEventListener("click",function(){
 	let text = document.getElementById("text").value;
 	let checkWordsArray = getInputCheckWords();
 	for( let word of checkWordsArray ){
-		let regexp = new RegExp(`(${word})`, 'gi')
+		let regexp = new RegExp(`(${word})`, 'g')
 		text = text.replace(regexp, '<span class="highlight">$1</span>')
 	}
 	text = text.replace(new RegExp(/\n/||/\r/||/\r\n/, 'g'), '<br/>');
@@ -179,7 +226,7 @@ check.addEventListener("click",function(){
 		result.style.display = "block"
 	}
 
-	localStorage.setItem("checkWords", checkWordsArray);
+	localStorage.setItem("words", getWordsFromCsv());
 });
 
 /**
