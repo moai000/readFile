@@ -68,12 +68,16 @@ input#uploadFile {
 }
 ul.checkWords {
 	display: flex;
-}
-ul.checkWords:first-child {
-	margin-top: 10px;
+	margin-right: 30px;
 }
 ul.checkWords li {
 	margin: 2px;
+}
+ul.wrap {
+	display: flex;
+}
+ul.wrap:first-child {
+	margin-top: 10px;
 }
 li.changedWord {
 	min-width: 150px;

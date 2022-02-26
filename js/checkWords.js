@@ -42,7 +42,7 @@ $(document).ready(function(){
 					li.appendChild(link);
 					linkList.appendChild(li);
 					
-					if ( (i-1)%3==0 || i-1==textContent.length){
+					if ( (i+1)%3==0 || i-1==textContent.length){
 						elem.appendChild(linkList);
 					}
 				}	
@@ -54,6 +54,9 @@ $(document).ready(function(){
  	} 
  }
  xmlhttp.open("GET", "./text/fileList.txt");
+ xmlhttp.setRequestHeader('Pragma', 'no-cache');
+ xmlhttp.setRequestHeader('Cache-Control', 'no-cache');
+ xmlhttp.setRequestHeader('If-Modified-Since', 'Thu, 01 Jun 1970 00:00:00 GMT');
  xmlhttp.send();
  
  /**
@@ -119,14 +122,23 @@ function setCheckWords(array){
 		wordList.removeChild(wordList.firstChild);
 	}
 
+	let wrapUl = document.createElement("ul");
+	wrapUl.classList.add("wrap");
+
 	let ul = document.createElement("ul");
 	ul.classList.add("checkWords");
 
 	//表記揺れ対象文字表示
 	for (let i=0; array.length>i; i++) {
+		if (i!==0 && i%3==0){
+			wordList.append(wrapUl);
+			wrapUl = document.createElement("ul");
+			wrapUl.classList.add("wrap");
+		}
 
 		ul = document.createElement("ul");
 		ul.classList.add("checkWords");
+
 		let arrow = document.createElement("li");
 		arrow.innerText = "←";
 		arrow.classList.add("arrow");
@@ -151,7 +163,11 @@ function setCheckWords(array){
 			}
 			li.appendChild(input);
 			ul.appendChild(li);
-			wordList.append(ul);
+		}
+		wrapUl.appendChild(ul);
+
+		if (array.length==i+1){
+			wordList.append(wrapUl);
 		}
 	}
 }
